@@ -113,17 +113,21 @@ add this code block to the Podfile that automatically sets the target membership
 ```podspec
   post_install do |installer|
     # ... some stuff
-       if target.name  == "react-native-here-explore"
-         all_filerefs = installer.pods_project.files
-         all_filerefs.each do |fileref|
-            if fileref.path.end_with? "heresdk.xcframework"
-             build_phase = target.frameworks_build_phase
-             unless build_phase.files_references.include?(fileref)
-               build_phase.add_file_reference(fileref)
-             end
-           end
-         end
-       end
+    
+      installer.pods_project.targets.each do |target|
+      if target.name == "react-native-here-explore"
+        all_filerefs = installer.pods_project.files
+        all_filerefs.each do |fileref|
+          if fileref.path.end_with? "heresdk.xcframework"
+            build_phase = target.frameworks_build_phase
+            unless build_phase.files_references.include?(fileref)
+              build_phase.add_file_reference(fileref)
+            end
+          end
+        end
+      end
+    end
+
     # ... some stuff
     end
 ```
